@@ -1,20 +1,8 @@
-/* --- Card --- */
-
-struct card {
-  int8_t rank;
-  int8_t suit;
-};
+#include "blackjack.h"
 
 void card_print(struct card c) {
-  printf("%2d|%c\n", (int) c.rank, (char) c.suit); //printf("%2"PRId8"|%c\n", c.rank, (char) c.suit);
+  printf("%2d %c\n", (int) c.rank, (char) c.suit); //printf("%2"PRId8"|%c\n", c.rank, (char) c.suit);
 }
-
-/* --- Deck --- */
-
-struct deck {
-  int16_t head;
-  struct card cards[52];
-};
 
 /* Nao eh preguica, eh loop unrolling
  * obs: talvez seja preguica :p 
@@ -23,17 +11,16 @@ struct deck {
 void deck_init(struct deck *d) {
   for (int i = 0; i < 13; ++i) { 
     d->cards[i*4].rank = i;
-    d->cards[i*4].suit = 'C';
-
+    d->cards[i*4].suit = '♣';
 
     d->cards[i*4+1].rank = i;
-    d->cards[i*4+1].suit = 'D';
+    d->cards[i*4+1].suit = '♦';
 
     d->cards[i*4+2].rank = i;
-    d->cards[i*4+2].suit = 'H';
+    d->cards[i*4+2].suit = '♥';
 
     d->cards[i*4+3].rank = i;
-    d->cards[i*4+3].suit = 'S';
+    d->cards[i*4+3].suit = '♠';
 
   }
 }
@@ -61,12 +48,6 @@ struct card deck_draw(struct deck *d) {
 }
 
 /* --- Player --- */
-
-
-struct player {
-  int index;
-  struct card hand[21];
-};
 
 void player_init(struct player *p) { /* Zera a memoria de uma struct Player */
   bzero(p, sizeof (struct player));
@@ -99,9 +80,9 @@ void table_print(struct player *players, int8_t n_players) {
   printf("\033[2J=============================\n");
 
   for (int8_t i = 0; i <= n_players; ++i) {
-    printf("--------  player %d  --------\n", i);
+    printf("Cards of Player %d\n", i);
     player_hand_print(*(players + i));
-    printf("-------- next player --------\n");
+    printf("\n");
   }
 
   //printf("=============================\n\033[u");
@@ -112,41 +93,15 @@ void table_print_dealer(struct player *players, int8_t n_players) {
   printf("=============================\n");
 
   for (int8_t i = 0; i <= n_players; ++i) {
-    printf("--------  player %d  --------\n", i);
+    printf("Cards of Player %d\n", i);
     player_hand_print(*(players + i));
-    printf("-------- next player --------\n");
+    printf("\n");
   }
 
   printf("=============================\n");
 }
 
 /* --- Ring --- */
-
-#define SYNC 'S'
-#define READY 'R'
-#define BROADCAST 'B'
-#define ASK 'A'
-#define START 'T'
-
-#define HIT '1'
-#define STAND '0'
-
-#define PORT_READ   20241
-#define PORT_WRITE  PORT_READ
-
-#define BIND 0
-#define CONNECT 1
-
-struct ring_pkg { 
-  int8_t type;
-  int8_t addr;
-  struct card card;
-};
-
-struct ring_socket {
-  int fd;
-  struct sockaddr_in addr;
-};
 
 int ring_socket_init(struct ring_socket *r_socket, uint16_t port, char *ipv4_addr, int type) {
   r_socket->fd = socket(AF_INET, SOCK_DGRAM, 0);

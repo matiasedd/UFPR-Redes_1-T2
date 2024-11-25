@@ -1,17 +1,4 @@
-#include <inttypes.h>   /* stdint: int8_t, int16_t, uint16_t inttypes: PRId8 */
-#include <sys/socket.h> /* sockaddr_in, socket, AF_INET */
-#include <arpa/inet.h>  /* htons */
-#include <stdlib.h>     /* atoi */
-#include <stdio.h>      /* printf, puts */
-
-#include <string.h>     /* memset */
-
-#include "blackjack.c"
-
-
-/* ./a.out ID ADDR1 ADDR2 */
-
-/* --- --- */
+#include "blackjack.h"
 
 int main(int argc, char **argv) {
 
@@ -122,7 +109,7 @@ int main(int argc, char **argv) {
         #endif
       }
 
-      printf("n players: %d\n", pkg.addr);
+      printf("Nº of Players: %d\n", pkg.addr);
 
       while (getc(stdin) != '\n');
       
@@ -154,7 +141,7 @@ int main(int argc, char **argv) {
             pkg.card = deck_draw(&deck);
             player_card_store(players + i, pkg.card);
 
-            printf("sending first to %d\n", (int) i);
+            printf("Sending first card to Player %d\n", (int) i);
 
             send(socket_sendto.fd, &pkg, sizeof (struct ring_pkg), 0);
             recv(socket_recvfrom.fd, &pkg, sizeof (struct ring_pkg), 0);
@@ -171,7 +158,7 @@ int main(int argc, char **argv) {
             pkg.card = deck_draw(&deck);
             player_card_store(players + i, pkg.card);
 
-            printf("sending second to %d\n", (int) i);
+            printf("Sending second card to Player %d\n", (int) i);
 
             send(socket_sendto.fd, &pkg, sizeof (struct ring_pkg), 0);
             recv(socket_recvfrom.fd, &pkg, sizeof (struct ring_pkg), 0);
@@ -183,7 +170,7 @@ int main(int argc, char **argv) {
         /* --- Handle Players --- */
 
         for (int8_t i = 1; i <= n_players; ++i) { 
-          printf("handling player %d\n", i);
+          printf("Handling Player %d\n", i);
 
           for (;;) {
             pkg.type = ASK;
