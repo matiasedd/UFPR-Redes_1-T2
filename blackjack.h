@@ -38,6 +38,7 @@ struct card deck_draw(struct deck *d);
 struct player {
   int index;
   struct card hand[21];
+  float bet;
 };
 
 void player_init(struct player *p);
@@ -49,6 +50,8 @@ void player_hand_print(struct player p);
 void player_hand_clean(struct player *p);
 
 int8_t player_hand_value(struct player *p);
+
+void player_bet_store(struct player *p, float b);
 
 void table_print(struct player *players, int8_t n_players);
 
@@ -64,6 +67,8 @@ void table_print_dealer(struct player *players, int8_t n_players);
 
 #define HIT '1'
 #define STAND '0'
+#define DOUBLE_DOWN '2'
+#define SPLIT '3'
 
 #define PORT_READ   20241
 #define PORT_WRITE  PORT_READ
@@ -75,6 +80,7 @@ struct ring_pkg {
   int8_t type;
   int8_t addr;
   struct card card;
+  int8_t bet;
 };
 
 struct ring_socket {
