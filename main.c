@@ -79,7 +79,7 @@ int main(int argc, char **argv)
         if (pkg.bet == -1)
         {
           printf("[%c] Stand [%c] Hit [%c] Double Down [%c] Split", STAND, HIT, DOUBLE_DOWN, SPLIT);
-          printf("\n> Enter your action: ");
+          printf("\n\n> Enter your action: ");
 
           pkg.card.rank = (int8_t)getc(stdin);
         }
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
           for (int i = 0; i < 5; i++)
             printf("[%d] $%.2f ", i + 1, values[i]);
-          printf("\nMake your bet: ");
+          printf("\n\n> Make your bet: ");
 
           scanf("%d", &choice);
           pkg.bet = values[choice - 1];
@@ -255,6 +255,27 @@ int main(int argc, char **argv)
 
             if (player_hand_value(players + i) > 21)
               goto loop_exit;
+
+            break;
+          case DOUBLE_DOWN:
+            pkg.type = BROADCAST;
+            pkg.addr = i;
+            pkg.bet = players[i].bet * 2;
+
+            send(socket_sendto.fd, &pkg, sizeof(struct ring_pkg), 0);
+            recv(socket_recvfrom.fd, &pkg, sizeof(struct ring_pkg), 0);
+
+            pkg.type = BROADCAST;
+            pkg.addr = i;
+            pkg.bet = -1;
+
+            pkg.card = deck_draw(&deck);
+            player_card_store(players + i, pkg.card);
+
+            send(socket_sendto.fd, &pkg, sizeof(struct ring_pkg), 0);
+            recv(socket_recvfrom.fd, &pkg, sizeof(struct ring_pkg), 0);
+
+            goto loop_exit;
 
             break;
           }

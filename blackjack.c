@@ -87,19 +87,6 @@ int8_t player_hand_value(struct player *p) { /* Retorna o melhor valor das carta
   return aux;
 }
 
-float player_bet(struct player *p) { /* Aposta do jogador */
-	float values[5] = {5, 10, 20, 50, 100};
-
-	for (int i = 0; i < 4; i++)
-		printf("[%d] $%.2f ", i+1, values[i]);
-	printf("\nMake your bet: ");
-	
-	int choice;
-	scanf("%d", &choice);
-
-	return values[choice-1];
-}
-
 void table_print(struct player *players, int8_t n_players) {
   //printf("\033[2J=============================\n");
   printf("\033[2J----------\n\n");
@@ -112,10 +99,6 @@ void table_print(struct player *players, int8_t n_players) {
     player_hand_print(*(players + i));
 	printf("\n");
   }
-
-  //printf("=============================\n\033[u");
-  //printf("=============================\n");
-  // printf("----------\n");
 }
 
 void table_print_dealer(struct player *players, int8_t n_players) {
@@ -128,8 +111,6 @@ void table_print_dealer(struct player *players, int8_t n_players) {
     player_hand_print(*(players + i));
     printf("\n");
   }
-
-  //printf("=============================\n");
 }
 
 /* --- Ring --- */

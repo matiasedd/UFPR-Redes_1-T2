@@ -80,7 +80,7 @@ struct ring_pkg {
   int8_t type;
   int8_t addr;
   struct card card;
-  int8_t bet;
+  float bet;
 };
 
 struct ring_socket {
