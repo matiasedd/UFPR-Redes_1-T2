@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     }
 
     puts("Connection established!"); /* Conexao estabelecida com sucesso */
-    puts("Your game will start soon...");
+    puts("The game will start soon...");
 
     int n_players = pkg.addr;
     struct player *players = malloc(sizeof(struct player) * (n_players + 1));
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 
         if (pkg.bet == -1)
         {
-          printf("[%c] Stand [%c] Hit [%c] Double Down [%c] Split", STAND, HIT, DOUBLE_DOWN, SPLIT);
+          printf("[%c] Stand [%c] Hit [%c] Double Down", STAND, HIT, DOUBLE_DOWN);
           printf("\n\n> Enter your action: ");
 
           pkg.card.rank = (int8_t)getc(stdin);
@@ -143,7 +143,6 @@ int main(int argc, char **argv)
 #endif
     }
 
-    // printf("Nº of Players: %d\n", pkg.addr);
     puts("> Press ENTER to start");
 
     while (getc(stdin) != '\n')
@@ -221,8 +220,6 @@ int main(int argc, char **argv)
         send(socket_sendto.fd, &pkg, sizeof(struct ring_pkg), 0);
         recv(socket_recvfrom.fd, &pkg, sizeof(struct ring_pkg), 0);
       }
-
-      /* --- Ask For Insurance --- */
 
       /* --- Handle Players --- */
 
@@ -314,8 +311,6 @@ int main(int argc, char **argv)
       }
 
       /* --- End Of Round --- */
-
-      // printf("=============================\n");
 
       puts("\n*** ROUND FINISHED ***\n");
       printf("Dealer's hand: %d\n", player_hand_value(players));

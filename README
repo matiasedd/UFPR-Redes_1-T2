@@ -1,3 +1,10 @@
-Shoe /* Not really */
-Single Deck
-Max of 4 Players
+Blackjack
+  - Shoe 
+  - Single Deck
+  - Max of 4 Players
+
+./a.out ID IP_LISTEN IP_SEND
+
+ID      0 - Dealer
+ID [1..4] - Player
+
